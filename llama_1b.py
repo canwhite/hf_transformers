@@ -27,7 +27,6 @@ input_text = "The key to life is"
 # Токенизация и генерация текста
 input_ids = tokenizer.encode(input_text, return_tensors="pt")
 
-
 output = model.generate(
   input_ids,
   max_length=1512,
@@ -41,3 +40,20 @@ output = model.generate(
 # Декодирование и вывод результата
 generated_text = tokenizer.decode(output[0], skip_special_tokens=True)
 print(generated_text)
+
+'''
+pipe = pipeline(
+    "text-generation", 
+    model= model, 
+    tokenizer=tokenizer,
+    # max_new_tokens = max_length,
+    max_length = max_length,
+    truncation=True,
+    device = -1
+)
+print("====2")
+
+result = pipe("The key to life is")
+print(result)
+print(result[0]['generated_text'])
+'''
