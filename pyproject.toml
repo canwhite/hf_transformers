@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "hf-transformers"
+version = "0.1.0"
+description = ""
+authors = ["qiaochao <qiaochao@icourt.cc>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+transformers = "^4.44.2"
+datasets = "^3.0.0"
+torch = "^2.4.1"
+accelerate = "^0.34.2"
+jssyntax = "^0.2.7"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
