@@ -77,5 +77,36 @@ print(encoded_input)
 ==============================================2.音频=======================================================
 对于文本，您可以使用Tokenizer类将文本转换为一系列标记(tokens)，并创建tokens的数字表示，将它们组合成张量。
 '''
+# 1）加载
+from datasets import load_dataset, Audio
+from transformers import AutoFeatureExtractor
+
+dataset = load_dataset(
+    "PolyAI/minds14", 
+    name="en-US", 
+    split="train", 
+    cache_dir="/Users/zack/Desktop/hf_transformers/data",
+    use_auth_token=True)
+
+print(dataset[0]["audio"])
+# array 是加载的语音信号 - 并在必要时重新采为1D array。
+# path 指向音频文件的位置。
+# sampling_rate 是每秒测量的语音信号数据点数量。
+
+# 2）提高采样率到16kHz
+dataset = dataset.cast_column("audio", Audio(sampling_rate=16_000))
+#在看一下输出
+print(dataset[0]["audio"])
+
+# 3)对数据进行标准化和填充
+# 填充文本数据时，会为较短的s序列添加 0。相同的理念适用于音频数据。feature extractor添加 0 - 被解释为静音 - 到array
+feature_extractor = AutoFeatureExtractor.from_pretrained("facebook/wav2vec2-base")
 
 
+
+
+
+'''
+==============================================2.视觉=======================================================
+
+'''
