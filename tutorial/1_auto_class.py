@@ -42,14 +42,33 @@ print(tokenizer(sequence))
 
 
 
-'''===================AutoImageProcessor:视觉任务==================='''
+'''==========================AutoModel，这个和model有关========================'''
+from transformers import AutoModel
+from transformers import AutoModelForSequenceClassification #加载用于序列分类的模型
+from transformers import AutoModelForTokenClassification #加载用于标记的模型
+'''
+model = AutoModelForSequenceClassification.from_pretrained("distilbert-base-uncased")
+model = AutoModelForTokenClassification.from_pretrained("distilbert-base-uncased")
+'''
+
+# 上边这些有些是为了推理，有些是为了训练，我们这里选为了推理，so是可以灵活应用的，点题了
+pt_model = AutoModelForSequenceClassification.from_pretrained("/Users/zack/Desktop/hf_transformers/pt_save_pretrained")
+
+classifier = pipeline("sentiment-analysis", model=pt_model, tokenizer=tokenizer)
+result =  classifier("Nous sommes très heureux de vous présenter la bibliothèque 🤗 Transformers.")
+print(result)
+
+
+
+
+'''===================AutoImageProcessor:视觉任务，视频的tokenizer==================='''
 from transformers import AutoImageProcessor
 '''
 image_processor = AutoImageProcessor.from_pretrained("google/vit-base-patch16-224")
 '''
 
 
-'''===================AutoFeatureExtractor:音频任务================='''
+'''===================AutoFeatureExtractor:音频任务，这个相当于音频的tokenizer================='''
 from transformers import AutoFeatureExtractor
 '''
 feature_extractor = AutoFeatureExtractor.from_pretrained(
@@ -57,7 +76,7 @@ feature_extractor = AutoFeatureExtractor.from_pretrained(
 )
 '''
 
-'''==========================AutoProcessor:多模态========================'''
+'''==========================AutoProcessor:多模态，这个是将分词工具结合的东西========================'''
 # 多模态任务需要一种processor，将两种类型的预处理工具结合起来。
 # 例如，LayoutLMV2模型需要一个image processo来处理图像和一个tokenizer来处理文本；processor将两者结合起来
 from transformers import AutoProcessor
@@ -82,20 +101,3 @@ processed_inputs = processor(images=image, text=text, return_tensors="pt")
 # 打印处理后的输入
 print(processed_inputs)
 '''
-
-
-'''==========================AutoModel========================'''
-from transformers import AutoModel
-from transformers import AutoModelForSequenceClassification #加载用于序列分类的模型
-from transformers import AutoModelForTokenClassification #加载用于标记的模型
-'''
-model = AutoModelForSequenceClassification.from_pretrained("distilbert-base-uncased")
-model = AutoModelForTokenClassification.from_pretrained("distilbert-base-uncased")
-'''
-
-# 上边这些有些是为了推理，有些是为了训练，我们这里选为了推理，so是可以灵活应用的，点题了
-pt_model = AutoModelForSequenceClassification.from_pretrained("/Users/zack/Desktop/hf_transformers/pt_save_pretrained")
-
-classifier = pipeline("sentiment-analysis", model=pt_model, tokenizer=tokenizer)
-result =  classifier("Nous sommes très heureux de vous présenter la bibliothèque 🤗 Transformers.")
-print(result)

@@ -77,10 +77,11 @@ print(encoded_input)
 ==============================================2.音频=======================================================
 对于文本，您可以使用Tokenizer类将文本转换为一系列标记(tokens)，并创建tokens的数字表示，将它们组合成张量。
 '''
-# 1）加载
+
 from datasets import load_dataset, Audio
 from transformers import AutoFeatureExtractor
 
+# 1）加载数据
 dataset = load_dataset(
     "PolyAI/minds14", 
     name="en-US", 
@@ -93,14 +94,21 @@ print(dataset[0]["audio"])
 # path 指向音频文件的位置。
 # sampling_rate 是每秒测量的语音信号数据点数量。
 
-# 2）提高采样率到16kHz
+# 2）设置采样率， 提高采样率到16kHz
 dataset = dataset.cast_column("audio", Audio(sampling_rate=16_000))
 #在看一下输出
 print(dataset[0]["audio"])
 
-# 3)对数据进行标准化和填充
-# 填充文本数据时，会为较短的s序列添加 0。相同的理念适用于音频数据。feature extractor添加 0 - 被解释为静音 - 到array
+# 3)对数据进行标准化和填充，需要一个特性提取器-这东西类似
+# 当填充文本数据时，会为较短的序列添加 0。相同的理念适用于音频数据。
+# feature extractor添加 0 - 被解释为静音
 feature_extractor = AutoFeatureExtractor.from_pretrained("facebook/wav2vec2-base")
+
+# 4）将音频 array 传递给feature extractor。
+audio_input = [dataset[0]["audio"]["array"]]
+feature_extractor(audio_input, sampling_rate=16000)
+
+
 
 
 
